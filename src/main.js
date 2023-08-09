@@ -1,6 +1,23 @@
-import './assets/main.css'
+import './assets/base.css';
 
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
-createApp(App).mount('#app')
+import App from './App.vue';
+import HomePage from './views/HomePage.vue';
+import CityPage from './views/CityPage.vue';
+
+const routes = [
+  { path: '/', component: HomePage },
+  { path: '/:cityId', component: CityPage },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+const app = createApp(App);
+
+app.use(router);
+app.mount('#app');
