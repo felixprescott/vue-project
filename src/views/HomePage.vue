@@ -1,18 +1,45 @@
+<script setup>
+import { ref, watch } from 'vue';
+const cityInput = ref();
+const chooseCity = (city) => {
+  cityInput.value = city;
+};
+
+watch(cityInput, () => {
+  console.log(cityInput.value);
+});
+</script>
+
 <template>
   <div class="home">
     <div class="home__city">
       <input
         id="citySelect"
         class="home__city-input"
-        ref=""
+        v-model="cityInput"
         placeholder="Укажите город"
       />
     </div>
     <div class="home__text-help">
-      <div>Начните вводить город,</div>
-      <div>
+      <div class="home__text-help--first">Начните вводить город,</div>
+      <div class="home__text-help--second">
         например,
-        <span>Ижевск</span>
+        <a href="#" @click="() => chooseCity('Ижевск')">Ижевск</a>
+      </div>
+    </div>
+    <div class="home__text-fav">
+      <div>
+        <div class="home__text-fav--first">Используйте значок «закладки»,</div>
+        <div class="home__text-fav--second">
+          чтобы закрепить город на главной
+        </div>
+      </div>
+      <div class="home__text-fav--bookmark">
+        <img
+          class="header__logo-image-img"
+          src="@/assets/svg/bookmark.svg"
+          alt="Header Logo"
+        />
       </div>
     </div>
   </div>
@@ -21,7 +48,6 @@
 <style lang="scss" scoped>
 .home {
   width: 100%;
-  max-width: 550px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,6 +56,7 @@
 
   &__city {
     width: 100%;
+    max-width: 550px;
     max-width: 510px;
 
     &-input {
@@ -39,7 +66,6 @@
       border: 0;
       width: 100%;
       color: #fff;
-      font-weight: 400;
       outline: none;
     }
 
@@ -49,13 +75,36 @@
   }
 
   &__text-help {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-top: 44px;
     color: #8a91ab;
-    font-weight: 400;
+
+    &--first::before {
+      content: url(../assets/svg/arrow.svg);
+      width: 38px;
+      height: 32px;
+      position: absolute;
+      left: -40px;
+      top: -16px;
+    }
+
+    a {
+      border-bottom: 1px dotted #fff;
+    }
+  }
+
+  &__text-fav {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+    color: #8a91ab;
   }
 }
 
