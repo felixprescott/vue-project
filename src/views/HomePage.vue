@@ -1,20 +1,34 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 const cityInput = ref();
 const chooseCity = (city) => {
   cityInput.value = city;
 };
+
+import cities from '../assets/cities.json';
+const matchedCities = ref([]);
+watch(cityInput, () => {
+  matchedCities.value = [];
+  if (cityInput.value) {
+    const cityToFind = cityInput.value.toLowerCase();
+    for (const city of cities) {
+      if (city.toLowerCase().includes(cityToFind)) {
+        matchedCities.value.push(city);
+        if (matchedCities.value.length === 5) {
+          break;
+        }
+      }
+    }
+  }
+  console.log(matchedCities.value);
+});
 </script>
 
 <template>
   <div class="home">
     <div class="home__city">
-      <input
-        id="citySelect"
-        class="home__city-input"
-        v-model="cityInput"
-        placeholder="Укажите город"
-      />
+      <input id="citySelect" name="citySelect" list="citySelectList" class="home__city-input" v-model="cityInput"
+        placeholder="Укажите город" />
     </div>
     <div class="home__text-help">
       <div class="home__text-help--first">Начните вводить город,</div>
@@ -31,17 +45,13 @@ const chooseCity = (city) => {
         </div>
       </div>
       <div class="home__text-fav--bookmark">
-        <img
-          class="header__logo-image-img"
-          src="@/assets/svg/bookmark.svg"
-          alt="Header Logo"
-        />
+        <img class="header__logo-image-img" src="@/assets/svg/bookmark.svg" alt="Header Logo" />
       </div>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .home {
   width: 100%;
   display: flex;
