@@ -1,13 +1,9 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 const cityInput = ref();
 const chooseCity = (city) => {
   cityInput.value = city;
 };
-
-watch(cityInput, () => {
-  console.log(cityInput.value);
-});
 </script>
 
 <template>

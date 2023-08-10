@@ -1,5 +1,6 @@
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+const route = useRoute();
 const router = useRouter();
 const goHome = () => {
   router.push('/');
@@ -8,12 +9,12 @@ const goHome = () => {
 
 <template>
   <main class="main">
-    <header class="header">
+    <header class="header" :class="{ mobileCityHidden: route.params.cityId }">
       <div class="header__logo" @click="goHome">
         <div class="header__logo-image">
           <img
             class="header__logo-image-img"
-            src="@/assets/svg/header_logo.svg"
+            src="@/assets/svg/logo.svg"
             alt="Header Logo"
           />
         </div>
@@ -65,6 +66,10 @@ const goHome = () => {
 @media screen and (max-width: 600px) {
   .header {
     background: none;
+
+    &.mobileCityHidden {
+      display: none;
+    }
   }
 }
 </style>
