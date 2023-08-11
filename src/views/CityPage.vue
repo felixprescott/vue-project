@@ -22,31 +22,17 @@ const toggleBookmark = () => {
         </div>
         <div class="city__header--back--text">Назад</div>
       </div>
-      <div class="city__header--bookmark" @click="toggleBookmark">
-        <img
-          v-if="bookmark"
-          class="header__logo-image-img"
-          src="@/assets/svg/bookmark_small_on.svg"
-          alt="Bookmark Icon"
-        />
-        <img
-          v-else
-          class="header__logo-image-img"
-          src="@/assets/svg/bookmark_small_off.svg"
-          alt="Bookmark Icon"
-        />
+      <div class="city__header--bookmark" @click="toggleBookmark"> <img v-if="bookmark" class="header__logo-image-img"
+          src="@/assets/svg/bookmark_small_on.svg" alt="Bookmark Icon" />
+        <img v-else class="header__logo-image-img" src="@/assets/svg/bookmark_small_off.svg" alt="Bookmark Icon" />
       </div>
     </div>
-    <div class="city__name">Москва {{ route.params.cityId }}</div>
+    <div class="city__name">{{ route.params.cityId }}</div>
     <div class="city__weather-text">Облачно с прояснениями</div>
     <div class="city__weather">
       <div class="city__weather--temp">-13°</div>
       <div class="city__weather--logo">
-        <img
-          class="city__weather--logo--img"
-          src="@/assets/svg/snow.svg"
-          alt="Weather Icon"
-        />
+        <img class="city__weather--logo--img" src="@/assets/svg/snow.svg" alt="Weather Icon" />
       </div>
     </div>
     <div class="city__weather-pressure">
@@ -65,11 +51,9 @@ const toggleBookmark = () => {
   flex-direction: column;
   align-items: center;
 
-  background: radial-gradient(
-    80.36% 80.36% at 50% 0%,
-    #5a607c 0%,
-    #161b30 100%
-  );
+  background: radial-gradient(80.36% 80.36% at 50% 0%,
+      #5a607c 0%,
+      #161b30 100%);
 
   &__header {
     width: 100%;

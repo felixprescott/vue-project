@@ -1,40 +1,31 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router'
+import CityAutocomplete from '../components/CityAutocomplete.vue';
+const router = useRouter();
+
 const cityInput = ref();
-const chooseCity = (city) => {
+const inputCity = (city) => {
   cityInput.value = city;
 };
 
-import cities from '../assets/cities.json';
-const matchedCities = ref([]);
-watch(cityInput, () => {
-  matchedCities.value = [];
-  if (cityInput.value) {
-    const cityToFind = cityInput.value.toLowerCase();
-    for (const city of cities) {
-      if (city.toLowerCase().includes(cityToFind)) {
-        matchedCities.value.push(city);
-        if (matchedCities.value.length === 5) {
-          break;
-        }
-      }
-    }
-  }
-  console.log(matchedCities.value);
-});
+const chooseCity = (city) => {
+  router.push(`/${city}`)
+};
 </script>
 
 <template>
   <div class="home">
     <div class="home__city">
-      <input id="citySelect" name="citySelect" list="citySelectList" class="home__city-input" v-model="cityInput"
+      <input id="citySelect" name="citySelect" list="citySelectList" class="home__city--input" v-model="cityInput"
         placeholder="Укажите город" />
+      <CityAutocomplete :cityToFind="cityInput" @chooseCity="chooseCity" />
     </div>
     <div class="home__text-help">
       <div class="home__text-help--first">Начните вводить город,</div>
       <div class="home__text-help--second">
         например,
-        <a href="#" @click="() => chooseCity('Ижевск')">Ижевск</a>
+        <a href="#" @click="() => inputCity('Ижевск')">Ижевск</a>
       </div>
     </div>
     <div class="home__text-fav">
@@ -61,11 +52,13 @@ watch(cityInput, () => {
   padding: 80px 20px 20px 20px;
 
   &__city {
+    position: relative;
     width: 100%;
     max-width: 550px;
     max-width: 510px;
 
-    &-input {
+    &--input {
+      position: relative;
       padding: 18px 20px;
       border-radius: 2px;
       background: #2a2f45;
@@ -75,9 +68,10 @@ watch(cityInput, () => {
       outline: none;
     }
 
-    &-input::placeholder {
+    &--input::placeholder {
       color: #8a91ab;
     }
+
   }
 
   &__text-help {
