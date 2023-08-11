@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
+import { getFavoriteCities } from '../utils';
 import CityAutocomplete from '../components/CityAutocomplete.vue';
+import HomeHelp from '../components/HomeHelp.vue';
+import HomeFavCities from '../components/HomeFavCities.vue';
 const router = useRouter();
 
 const cityInput = ref();
@@ -12,37 +15,23 @@ const inputCity = (city) => {
 const chooseCity = (city) => {
   router.push(`/${city}`)
 };
+
+const favoriteCities = ref(getFavoriteCities());
 </script>
 
 <template>
   <div class="home">
     <div class="home__city">
       <input id="citySelect" name="citySelect" list="citySelectList" class="home__city--input" v-model="cityInput"
-        placeholder="Укажите город" />
+        placeholder="Укажите город" autofocus />
       <CityAutocomplete :cityToFind="cityInput" @chooseCity="chooseCity" />
     </div>
-    <div class="home__text-help">
-      <div class="home__text-help--first">Начните вводить город,</div>
-      <div class="home__text-help--second">
-        например,
-        <a href="#" @click="() => inputCity('Ижевск')">Ижевск</a>
-      </div>
-    </div>
-    <div class="home__text-fav">
-      <div>
-        <div class="home__text-fav--first">Используйте значок «закладки»,</div>
-        <div class="home__text-fav--second">
-          чтобы закрепить город на главной
-        </div>
-      </div>
-      <div class="home__text-fav--bookmark">
-        <img class="header__logo-image-img" src="@/assets/svg/bookmark.svg" alt="Header Logo" />
-      </div>
-    </div>
+    <HomeFavCities v-if="favoriteCities.length" />
+    <HomeHelp v-else @inputCity="inputCity" />
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .home {
   width: 100%;
   display: flex;
@@ -72,39 +61,6 @@ const chooseCity = (city) => {
       color: #8a91ab;
     }
 
-  }
-
-  &__text-help {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 44px;
-    color: #8a91ab;
-
-    &--first::before {
-      content: url(../assets/svg/arrow.svg);
-      width: 38px;
-      height: 32px;
-      position: absolute;
-      left: -40px;
-      top: -16px;
-    }
-
-    a {
-      border-bottom: 1px dotted #fff;
-    }
-  }
-
-  &__text-fav {
-    display: flex;
-    gap: 20px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 80px;
-    color: #8a91ab;
   }
 }
 

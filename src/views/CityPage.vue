@@ -1,16 +1,23 @@
 <script setup>
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { isCityFavorite, addFavoriteCity, removeFavoriteCity } from '../utils';
+
 const route = useRoute();
 const router = useRouter();
 const goHome = () => {
   router.push('/');
 };
 
-const bookmark = ref(false);
-const toggleBookmark = () => {
-  bookmark.value = !bookmark.value;
-};
+const cityMarked = ref(isCityFavorite(route.params.cityId));
+const markCity = (city) => {
+  addFavoriteCity(city);
+  cityMarked.value = true;
+}
+const unmarkCity = (city) => {
+  removeFavoriteCity(city);
+  cityMarked.value = false;
+}
 </script>
 
 <template>
@@ -22,9 +29,11 @@ const toggleBookmark = () => {
         </div>
         <div class="city__header--back--text">Назад</div>
       </div>
-      <div class="city__header--bookmark" @click="toggleBookmark"> <img v-if="bookmark" class="header__logo-image-img"
-          src="@/assets/svg/bookmark_small_on.svg" alt="Bookmark Icon" />
-        <img v-else class="header__logo-image-img" src="@/assets/svg/bookmark_small_off.svg" alt="Bookmark Icon" />
+      <div class="city__header--bookmark">
+        <img v-if="cityMarked" class="header__logo-image-img" src="@/assets/svg/bookmark_small_on.svg" alt="Bookmark Icon"
+          @click="() => unmarkCity(route.params.cityId)" />
+        <img v-else class="header__logo-image-img" src="@/assets/svg/bookmark_small_off.svg" alt="Bookmark Icon"
+          @click="() => markCity(route.params.cityId)" />
       </div>
     </div>
     <div class="city__name">{{ route.params.cityId }}</div>

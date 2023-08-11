@@ -1,12 +1,11 @@
 <script setup>
 import { ref, watch } from 'vue';
 import CityAutocompleteOption from './CityAutocompleteOption.vue';
+import cities from '../assets/cities.json';
 const props = defineProps(['cityToFind']);
 const emits = defineEmits(['chooseCity']);
-import cities from '../assets/cities.json';
 
 const handleChooseCity = (e) => {
-  console.log(e);
   emits('chooseCity', e)
 }
 
