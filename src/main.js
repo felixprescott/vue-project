@@ -9,7 +9,7 @@ import CityPage from './views/CityPage.vue';
 
 const routes = [
   { path: '/', component: HomePage },
-  { path: '/:cityId', component: CityPage },
+  { path: '/:cityName', component: CityPage },
 ];
 
 const router = createRouter({

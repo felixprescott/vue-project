@@ -1,15 +1,18 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref, reactive, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { isCityFavorite, addFavoriteCity, removeFavoriteCity } from '../utils';
+import { isCityFavorite, addFavoriteCity, removeFavoriteCity, getDataForCity } from '../utils';
+import Loader from '../components/Loader.vue';
 
 const route = useRoute();
+const cityName = route.params.cityName;
+
 const router = useRouter();
 const goHome = () => {
   router.push('/');
 };
 
-const cityMarked = ref(isCityFavorite(route.params.cityId));
+const cityMarked = ref(isCityFavorite(cityName));
 const markCity = (city) => {
   addFavoriteCity(city);
   cityMarked.value = true;
@@ -18,6 +21,33 @@ const unmarkCity = (city) => {
   removeFavoriteCity(city);
   cityMarked.value = false;
 }
+
+const cityData = reactive({
+  icon: '',
+  description: '',
+  temp: '',
+  pressure: '',
+  dawn: '',
+});
+const loading = ref(true);
+const error = ref(false);
+
+onMounted(async () => {
+  try {
+    loading.value = true;
+    error.value = false;
+    const res = await getDataForCity(cityName);
+    cityData.icon = res.icon;
+    cityData.description = res.description;
+    cityData.temp = res.temp;
+    cityData.pressure = res.pressure;
+    cityData.dawn = res.dawn;
+  } catch (e) {
+    error.value = true;
+  } finally {
+    loading.value = false;
+  }
+})
 </script>
 
 <template>
@@ -31,24 +61,29 @@ const unmarkCity = (city) => {
       </div>
       <div class="city__header--bookmark">
         <img v-if="cityMarked" class="header__logo-image-img" src="@/assets/svg/bookmark_small_on.svg" alt="Bookmark Icon"
-          @click="() => unmarkCity(route.params.cityId)" />
+          @click="() => unmarkCity(cityName)" />
         <img v-else class="header__logo-image-img" src="@/assets/svg/bookmark_small_off.svg" alt="Bookmark Icon"
-          @click="() => markCity(route.params.cityId)" />
+          @click="() => markCity(cityName)" />
       </div>
     </div>
-    <div class="city__name">{{ route.params.cityId }}</div>
-    <div class="city__weather-text">Облачно с прояснениями</div>
-    <div class="city__weather">
-      <div class="city__weather--temp">-13°</div>
-      <div class="city__weather--logo">
-        <img class="city__weather--logo--img" src="@/assets/svg/snow.svg" alt="Weather Icon" />
+    <div class="city__name">{{ cityName }}</div>
+    <Loader v-if="loading" />
+    <div v-if="!loading && cityData.description" class="city__weather-text">{{ cityData.description }}</div>
+    <div v-if="!loading && cityData.temp" class="city__weather">
+      <div class="city__weather--temp">{{ cityData.temp }}</div>
+      <div v-if="cityData.icon" class="city__weather--logo">
+        <img class="city__weather--logo--img" :src="`/weather_icon_${cityData.icon.slice(0, 2)}.svg`"
+          alt="Weather Icon" />
       </div>
     </div>
-    <div class="city__weather-pressure">
+    <div v-if="!loading && cityData.pressure" class="city__weather-pressure">
       <img src="@/assets/svg/barometer.svg" alt="Barometer Icon" />
-      &nbsp;756 мм рт. ст.
+      &nbsp;{{ cityData.pressure }}
     </div>
-    <div class="city__weather-dawn">Закат в 18:00</div>
+    <div v-if="!loading && cityData.dawn" class="city__weather-dawn">{{ cityData.dawn }}</div>
+    <div v-if="error" class="city__error">
+      При загрузке информации о погоде произошла ошибка
+    </div>
   </div>
 </template>
 

@@ -11,7 +11,7 @@ defineProps(['cityName']);
       -13°
     </div>
     <div class="home__city--favs-item--logo">
-      <img class="home__city--favs-item--logo--img" src="@/assets/svg/snow.svg" alt="Weather Icon" />
+      <img class="home__city--favs-item--logo--img" src="/weather_icon_01.svg" alt="Weather Icon" />
     </div>
   </div>
 </template>
