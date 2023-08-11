@@ -12,11 +12,7 @@ const goHome = () => {
     <header class="header" :class="{ mobileCityHidden: route.params.cityId }">
       <div class="header__logo" @click="goHome">
         <div class="header__logo-image">
-          <img
-            class="header__logo-image-img"
-            src="@/assets/svg/logo.svg"
-            alt="Header Logo"
-          />
+          <img class="header__logo-image-img" src="@/assets/svg/logo.svg" alt="Header Logo" />
         </div>
         <div class="header__logo-text">WeatherCheck</div>
       </div>
@@ -27,11 +23,12 @@ const goHome = () => {
 
 <style lang="scss" scoped>
 .main {
-  height: 100vh;
+  min-height: 100vh;
   background-color: #161b30;
   display: flex;
   flex-direction: column;
 }
+
 .header {
   height: 65px;
   background-color: #2a2f45;

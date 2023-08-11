@@ -26,7 +26,7 @@ const favoriteCities = ref(getFavoriteCities());
         placeholder="Укажите город" autofocus />
       <CityAutocomplete :cityToFind="cityInput" @chooseCity="chooseCity" />
     </div>
-    <HomeFavCities v-if="favoriteCities.length" />
+    <HomeFavCities v-if="favoriteCities.length" :favoriteCities="favoriteCities" />
     <HomeHelp v-else @inputCity="inputCity" />
   </div>
 </template>
