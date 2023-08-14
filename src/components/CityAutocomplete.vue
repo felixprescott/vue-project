@@ -21,6 +21,9 @@ watch(() => props.cityToFind, () => {
           break;
         }
       }
+    };
+    if (matchedCities.value.length === 0) {
+      matchedCities.value.push(props.cityToFind);
     }
   }
 });

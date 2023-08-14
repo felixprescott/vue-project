@@ -37,14 +37,13 @@ export const getDataForCity = async (cityName) => {
     `${API}/weather?lang=ru&units=metric&q=${cityName}&appid=${API_KEY}`
   );
   const data = await response.json();
-  console.log(data);
 
   cityData.icon = data?.weather?.[0]?.icon || '';
-  const description = data?.weather?.[0]?.description || 'нет данных о погоде';
+  const description = data?.weather?.[0]?.description || 'Нет данных о погоде';
   cityData.description =
     description.charAt(0).toUpperCase() + description.slice(1);
   const temp = parseInt(data?.main?.temp);
-  cityData.temp = isNaN(temp) ? '-' : `${temp}°`;
+  cityData.temp = isNaN(temp) ? '--' : `${temp}°`;
   const pressure = parseFloat(data?.main?.pressure);
   cityData.pressure = isNaN(pressure)
     ? 'Нет данных о давлении'
@@ -52,15 +51,20 @@ export const getDataForCity = async (cityName) => {
   const timezone = data?.timezone || 0;
   const dawn = new Date(
     (cityData.icon.charAt(2) === 'd'
-      ? data?.sys?.sunset - timezone
-      : data?.sys?.sunrise - timezone) * 1000
+      ? data?.sys?.sunset + timezone
+      : data?.sys?.sunrise + timezone) * 1000
   );
+
   const dawnTime = `${dawn.getUTCHours() > 9 ? '' : '0'}${dawn.getUTCHours()}:${
     dawn.getUTCMinutes() > 9 ? '' : '0'
   }${dawn.getUTCMinutes()}`;
-  cityData.dawn = `${
-    cityData.icon.charAt(2) === 'd' ? 'Закат' : 'Восход'
-  } в ${dawnTime}`;
+  if (!isNaN(dawnTime)) {
+    cityData.dawn = `${
+      cityData.icon.charAt(2) === 'd' ? 'Закат' : 'Восход'
+    } в ${dawnTime}`;
+  } else {
+    cityData.dawn = 'Нет данных о восходе и закате';
+  }
 
   return cityData;
 };

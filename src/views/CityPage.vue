@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, reactive, nextTick } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { isCityFavorite, addFavoriteCity, removeFavoriteCity, getDataForCity } from '../utils';
 import Loader from '../components/Loader.vue';
@@ -162,6 +162,10 @@ onMounted(async () => {
 
   &__weather-dawn {
     color: #8a91ab;
+  }
+
+  &__error {
+    color: orangered;
   }
 }
 
