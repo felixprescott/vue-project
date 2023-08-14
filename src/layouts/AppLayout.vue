@@ -9,7 +9,7 @@ const goHome = () => {
 
 <template>
   <main class="main">
-    <header class="header" :class="{ mobileCityHidden: route.params.cityId }">
+    <header class="header" :class="{ mobileCityHidden: route.params.cityName }">
       <div class="header__logo" @click="goHome">
         <div class="header__logo-image">
           <img class="header__logo-image-img" src="@/assets/svg/logo.svg" alt="Header Logo" />
