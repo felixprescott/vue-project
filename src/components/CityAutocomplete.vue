@@ -1,7 +1,6 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { useCityAutocomplete } from '../composables';
 import CityAutocompleteOption from './CityAutocompleteOption.vue';
-import cities from '../assets/cities.json';
 const props = defineProps(['cityToFind']);
 const emits = defineEmits(['chooseCity']);
 
@@ -9,31 +8,23 @@ const handleChooseCity = (e) => {
   emits('chooseCity', e)
 }
 
-const matchedCities = ref([]);
-watch(() => props.cityToFind, () => {
-  matchedCities.value = [];
-  if (props.cityToFind) {
-    const cityToFind = props.cityToFind.toLowerCase();
-    for (const city of cities) {
-      if (city.toLowerCase().includes(cityToFind)) {
-        matchedCities.value.push(city);
-        if (matchedCities.value.length === 5) {
-          break;
-        }
-      }
-    };
-    if (matchedCities.value.length === 0) {
-      matchedCities.value.push(props.cityToFind);
-    }
-  }
-});
-
+const { matchedCities, loading, error } = useCityAutocomplete(() => props.cityToFind);
 </script>
 
 <template>
-  <div v-if="matchedCities.length" class="home__city--autocomplete">
-    <CityAutocompleteOption v-for="city in matchedCities" @click="() => handleChooseCity(city)"
-      :cityToFind="props.cityToFind" :fullCityName="city" :key="city" />
+  <div v-if="loading" class="home__city--autocomplete message">
+    Загрузка подходящих городов...
+  </div>
+  <div v-else-if="error" class="home__city--autocomplete message">
+    При загрузке списка подходящих городов произошла ошибка
+  </div>
+  <div v-else-if="matchedCities.length" class="home__city--autocomplete">
+    <CityAutocompleteOption
+      v-for="city in matchedCities"
+      @click="() => handleChooseCity(city)"
+      :cityToFind="props.cityToFind"
+      :fullCityName="city"
+      :key="city" />
   </div>
 </template>
 
@@ -46,5 +37,9 @@ watch(() => props.cityToFind, () => {
   border-radius: 2px;
   color: #8A91AB;
   background-color: #30354B;
+
+  &.message {
+    padding: 20px;
+  }
 }
 </style>
