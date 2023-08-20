@@ -1,33 +1,28 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { getFavoriteCities } from '../utils';
 import CityAutocomplete from '../components/CityAutocomplete.vue';
 import HomeHelp from '../components/HomeHelp.vue';
 import HomeFavCities from '../components/HomeFavCities.vue';
-const router = useRouter();
 
-const cityInput = ref();
-const inputCity = (city) => {
-  cityInput.value = city;
-};
-
-const chooseCity = (city) => {
-  router.push(`/${city}`)
-};
-
-const favoriteCities = ref(getFavoriteCities());
+import { useStore } from '../store';
+const store = useStore();
 </script>
 
 <template>
   <div class="home">
     <div class="home__city">
-      <input id="citySelect" name="citySelect" list="citySelectList" class="home__city--input" v-model="cityInput"
-        placeholder="Укажите город" autofocus />
-      <CityAutocomplete :cityToFind="cityInput" @chooseCity="chooseCity" />
+      <input
+        id="citySelect"
+        name="citySelect"
+        list="citySelectList"
+        class="home__city--input"
+        :value="store.cityQuery"
+        @input="(e) => store.setCityQuery(e.target.value)"
+        placeholder="Укажите город"
+        autofocus />
+      <CityAutocomplete />
     </div>
-    <HomeFavCities v-if="favoriteCities.length" :favoriteCities="favoriteCities" />
-    <HomeHelp v-else @inputCity="inputCity" />
+    <HomeFavCities v-if="store.favoriteCities.length" />
+    <HomeHelp v-else />
   </div>
 </template>
 

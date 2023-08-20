@@ -3,7 +3,7 @@ defineProps(['cityToFind', 'fullCityName']);
 </script>
 
 <template>
-  <div class="home__city--autocomplete--option">
+  <div v-if="fullCityName.includes(cityToFind)" class="home__city--autocomplete--option">
     {{
       fullCityName.slice(0, fullCityName.toLowerCase().indexOf(cityToFind.toLowerCase()))
     }}<span class="home__city--autocomplete--option--match">
@@ -12,6 +12,11 @@ defineProps(['cityToFind', 'fullCityName']);
     </span>{{
       fullCityName.slice(fullCityName.toLowerCase().indexOf(cityToFind.toLowerCase()) + cityToFind.length)
     }}
+  </div>
+  <div v-else class="home__city--autocomplete--option">
+    <span class="home__city--autocomplete--option--match">
+      {{ fullCityName }}
+    </span>
   </div>
 </template>
 

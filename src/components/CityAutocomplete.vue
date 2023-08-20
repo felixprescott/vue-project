@@ -1,14 +1,17 @@
 <script setup>
-import { useCityAutocomplete } from '../composables';
 import CityAutocompleteOption from './CityAutocompleteOption.vue';
-const props = defineProps(['cityToFind']);
-const emits = defineEmits(['chooseCity']);
 
-const handleChooseCity = (e) => {
-  emits('chooseCity', e)
-}
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const chooseCity = (city) => {
+  router.push(`/${city}`)
+};
 
-const { matchedCities, loading, error } = useCityAutocomplete(() => props.cityToFind);
+import { useStore } from '../store';
+const store = useStore();
+
+import { useCityAutocomplete } from '../composables';
+const { matchedCities, loading, error } = useCityAutocomplete(() => store.cityQuery);
 </script>
 
 <template>
@@ -21,8 +24,8 @@ const { matchedCities, loading, error } = useCityAutocomplete(() => props.cityTo
   <div v-else-if="matchedCities.length" class="home__city--autocomplete">
     <CityAutocompleteOption
       v-for="city in matchedCities"
-      @click="() => handleChooseCity(city)"
-      :cityToFind="props.cityToFind"
+      @click="() => chooseCity(city)"
+      :cityToFind="store.cityQuery"
       :fullCityName="city"
       :key="city" />
   </div>

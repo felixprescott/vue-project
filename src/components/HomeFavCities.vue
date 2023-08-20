@@ -1,13 +1,20 @@
 <script setup>
-import { useRouter } from 'vue-router';
 import FavCityItem from './FavCityItem.vue';
-defineProps(['favoriteCities']);
+
+import { useRouter } from 'vue-router';
 const router = useRouter();
+
+import { useStore } from '../store';
+const store = useStore();
 </script>
 
 <template>
   <div class="home__city--favs">
-    <FavCityItem v-for="city in favoriteCities" :key="city" :cityName="city" @click="() => router.push(`/${city}`)" />
+    <FavCityItem
+      v-for="city in store.favoriteCities"
+      :cityName="city"
+      @click="() => router.push(`/${city}`)"
+      :key="city" />
   </div>
 </template>
 

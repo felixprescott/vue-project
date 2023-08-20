@@ -1,12 +1,9 @@
 <script setup>
 import cities from '../assets/cities.json';
-const emits = defineEmits(['inputCity']);
-
 const randomCity = cities[Math.floor(Math.random() * cities.length)];
 
-const handleInputCity = () => {
-  emits('inputCity', randomCity);
-}
+import { useStore } from '../store';
+const store = useStore();
 </script>
 
 <template>
@@ -14,7 +11,7 @@ const handleInputCity = () => {
     <div class="home__text-help--first">Начните вводить город,</div>
     <div class="home__text-help--second">
       например,
-      <a href="#" @click="handleInputCity">{{ randomCity }}</a>
+      <a href="#" @click="() => store.setCityQuery(randomCity)">{{ randomCity }}</a>
     </div>
   </div>
   <div class="home__text-fav">

@@ -1,4 +1,5 @@
 import { FAVORITE_CITIES_PARAM } from '../constants';
+import { useStore } from '../store';
 
 export const getFavoriteCities = () => {
   const storageItem = localStorage.getItem(FAVORITE_CITIES_PARAM);
@@ -16,12 +17,17 @@ export const addFavoriteCity = (city) => {
   citiesList.push(city);
   const newCitiesList = [...new Set(citiesList)];
   localStorage.setItem(FAVORITE_CITIES_PARAM, newCitiesList);
+  const store = useStore();
+  store.addFavoriteCity(city);
+  store.setCityQuery('');
 };
 
 export const removeFavoriteCity = (city) => {
   const citiesList = getFavoriteCities();
   const newCitiesList = [...new Set(citiesList.filter((c) => c !== city))];
   localStorage.setItem(FAVORITE_CITIES_PARAM, newCitiesList);
+  const store = useStore();
+  store.removeFavoriteCity(city);
 };
 
 import { API, API_KEY } from '../constants';
